@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres
+    image: postgres:latest
     environment:
       - POSTGRES_PASSWORD=Admin123
     ports:
@@ -9,7 +9,7 @@ services:
       - E:/database/postgres/data:/var/lib/postgresql/data
     
   mongodb:
-    image: mongo
+    image: mongo:latest
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=Admin123
@@ -17,3 +17,9 @@ services:
       - 27017:27017
     volumes:
       - E:/database/mongodb/data:/data/db
+  
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 5672:5672
+      - 15672:15672

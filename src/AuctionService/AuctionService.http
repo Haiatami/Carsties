@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{AuctionService_HostAddress}}/v1/api/auctions/1877f227-55e9-45b8-9fca-a88879dc3691
+PUT {{AuctionService_HostAddress}}/v1/api/auctions/394638df-0344-45a8-94bb-e1130c105b1d
 Content-Type: application/json
 
 {
@@ -33,6 +33,6 @@ Content-Type: application/json
 
 ###
 
-DELETE {{AuctionService_HostAddress}}/v1/api/auctions/1877f227-55e9-45b8-9fca-a88879dc3691
+DELETE {{AuctionService_HostAddress}}/v1/api/auctions/a006efcb-1310-4c5c-81ab-2ce2d2b290b9
 
 ###
