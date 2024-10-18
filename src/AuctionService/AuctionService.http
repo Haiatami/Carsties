@@ -1,6 +1,38 @@
-@AuctionService_HostAddress = http://localhost:5152
+@AuctionService_HostAddress = http://localhost:7001
 
-GET {{AuctionService_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{AuctionService_HostAddress}}/v1/api/auctions
+
+###
+
+GET {{AuctionService_HostAddress}}/v1/api/auctions/1877f227-55e9-45b8-9fca-a88879dc3691
+
+###
+
+POST {{AuctionService_HostAddress}}/v1/api/auctions
+Content-Type: application/json
+
+{
+  "make": "Audi create",
+  "model": "R8",
+  "color": "White",
+  "year": 2021,
+  "mileage": 10050,
+  "imageUrl": "https://cdn.pixabay.com/photo/2019/12/26/20/50/audi-r8-4721217_960_720.jpg",
+  "reservePrice": 0,
+  "auctionEnd": "2024-11-06T04:09:40.507641Z"
+}
+
+###
+
+PUT {{AuctionService_HostAddress}}/v1/api/auctions/1877f227-55e9-45b8-9fca-a88879dc3691
+Content-Type: application/json
+
+{
+  "make": "Audi update"
+}
+
+###
+
+DELETE {{AuctionService_HostAddress}}/v1/api/auctions/1877f227-55e9-45b8-9fca-a88879dc3691
 
 ###
