@@ -1,6 +1,6 @@
 @SearchService_HostAddress = http://localhost:7002
 
-GET {{SearchService_HostAddress}}/v1/api/search?searchTerm=FooBar
+GET {{SearchService_HostAddress}}/api/search?searchTerm=FooBar
 
 ###
 
