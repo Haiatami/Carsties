@@ -1,8 +1,8 @@
 import { useParamsStore } from "@/hooks/useParamsStore";
-import { Button } from "flowbite-react";
+import { Button } from "flowbite-react/components/Button";
 import { AiOutlineClockCircle, AiOutlineSortAscending } from "react-icons/ai";
 import { BsFillStopCircleFill, BsStopwatchFill } from "react-icons/bs";
-import { GiFlame, GiFinishLine } from "react-icons/gi";
+import { GiFinishLine, GiFlame } from "react-icons/gi";
 
 const pageSizeButtons = [4, 8, 12];
 

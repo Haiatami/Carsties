@@ -1,4 +1,3 @@
-using Duende.IdentityServer;
 using IdentityService.Data;
 using IdentityService.Models;
 using IdentityService.Services;
@@ -6,69 +5,70 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-namespace IdentityService;
-
-internal static class HostingExtensions
+namespace IdentityService
 {
-    public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
+    internal static class HostingExtensions
     {
-        builder.Services.AddRazorPages();
+        public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddRazorPages();
 
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-        builder.Services
-            .AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
+            builder.Services
+               .AddIdentityServer(options =>
+               {
+                   options.Events.RaiseErrorEvents = true;
+                   options.Events.RaiseInformationEvents = true;
+                   options.Events.RaiseFailureEvents = true;
+                   options.Events.RaiseSuccessEvents = true;
 
-                if (builder.Environment.IsEnvironment("Docker"))
-                {
+                   if (builder.Environment.IsEnvironment("Docker"))
+                   {
                     options.IssuerUri = "http://localhost:5000";
-                }
-                // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
-                // options.EmitStaticAudienceClaim = true;
-            })
-            .AddInMemoryIdentityResources(Config.IdentityResources)
-            .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.Clients)
-            .AddAspNetIdentity<ApplicationUser>()
-            .AddProfileService<CustomProfileService>();
-        
-        builder.Services.ConfigureApplicationCookie(options =>
-        {
-            options.Cookie.SameSite = SameSiteMode.Lax;
-        });
+                   }
+                   // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
+                   // options.EmitStaticAudienceClaim = true;
+               })
+               .AddInMemoryIdentityResources(Config.IdentityResources)
+               .AddInMemoryApiScopes(Config.ApiScopes)
+               .AddInMemoryClients(Config.Clients)
+               .AddAspNetIdentity<ApplicationUser>()
+               .AddProfileService<CustomProfileService>();
 
-        builder.Services.AddAuthentication();
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
 
-        return builder.Build();
-    }
-    
-    public static WebApplication ConfigurePipeline(this WebApplication app)
-    { 
-        app.UseSerilogRequestLogging();
-    
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
+            builder.Services.AddAuthentication();
+
+            return builder.Build();
         }
 
-        app.UseStaticFiles();
-        app.UseRouting();
-        app.UseIdentityServer();
-        app.UseAuthorization();
-        
-        app.MapRazorPages()
-            .RequireAuthorization();
+        public static WebApplication ConfigurePipeline(this WebApplication app)
+        {
+            app.UseSerilogRequestLogging();
 
-        return app;
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseIdentityServer();
+            app.UseAuthorization();
+
+            app.MapRazorPages()
+                .RequireAuthorization();
+
+            return app;
+        }
     }
 }

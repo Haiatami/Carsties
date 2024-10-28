@@ -17,5 +17,5 @@ namespace IdentityService.Pages.Account.Register
         public string FullName { get; set; } = string.Empty;
         public string? ReturnUrl { get; set; }
         public string? Button { get; set; }
-    }   
+    }
 }

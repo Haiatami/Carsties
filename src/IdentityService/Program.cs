@@ -26,7 +26,7 @@ try
     // in production you will likely want a different approach.
     var retryPolicy = Policy
         .Handle<NpgsqlException>()
-        .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(10));
+        .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(5));
 
     retryPolicy.ExecuteAndCapture(() => SeedData.EnsureSeedData(app));
 

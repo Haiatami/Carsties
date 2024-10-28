@@ -18,13 +18,13 @@ namespace IdentityService.Pages.Account.Register
         {
             _userManager = userManager;
         }
-        
-        [BindProperty] 
-        public RegisterViewModel Input { get; set; } = new();
-        
-        [BindProperty] 
+
+        [BindProperty]
+        public RegisterViewModel Input { get; set; }
+
+        [BindProperty]
         public bool RegisterSuccess { get; set; }
-        
+
         public IActionResult OnGet(string returnUrl)
         {
             Input = new RegisterViewModel

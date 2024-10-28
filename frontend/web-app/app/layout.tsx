@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./nav/Navbar";
+import Navbar from "./nav/NavBar";
+import ToasterProvider from "./providers/ToasterProvider";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Carsties",
@@ -15,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ToasterProvider />
         <Navbar />
         <main className="container mx-auto px-5 pt-10">{children}</main>
       </body>
