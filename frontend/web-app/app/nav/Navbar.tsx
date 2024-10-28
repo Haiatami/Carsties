@@ -1,7 +1,7 @@
-import { getCurrentUser } from "../actions/authActions";
-import LoginButton from "./LoginButton";
-import Logo from "./Logo";
 import Search from "./Search";
+import Logo from "./Logo";
+import LoginButton from "./LoginButton";
+import { getCurrentUser } from "../actions/authActions";
 import UserActions from "./UserActions";
 
 export default async function Navbar() {

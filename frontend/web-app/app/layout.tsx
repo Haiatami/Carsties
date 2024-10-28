@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./nav/NavBar";
 import ToasterProvider from "./providers/ToasterProvider";
 import SignalRProvider from "./providers/SignalRProvider";
 import { getCurrentUser } from "./actions/authActions";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Carsties",
@@ -19,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getCurrentUser();
-  const notifyUrl = "http://localhost:6001/notifications";
+  const notifyUrl = process.env.NOTIFY_URL;
 
   return (
     <html lang="en">

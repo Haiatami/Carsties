@@ -1,8 +1,8 @@
 import { useParamsStore } from "@/hooks/useParamsStore";
-import { Button } from "flowbite-react/components/Button";
+import { Button, ButtonGroup } from "flowbite-react";
 import { AiOutlineClockCircle, AiOutlineSortAscending } from "react-icons/ai";
 import { BsFillStopCircleFill, BsStopwatchFill } from "react-icons/bs";
-import { GiFinishLine, GiFlame } from "react-icons/gi";
+import { GiFlame, GiFinishLine } from "react-icons/gi";
 
 const pageSizeButtons = [4, 8, 12];
 
@@ -52,7 +52,7 @@ export default function Filters() {
     <div className="flex justify-between items-center mb-4">
       <div>
         <span className="uppercase text-sm text-gray-500 mr-2">Filter by</span>
-        <Button.Group>
+        <ButtonGroup>
           {filterButtons.map(({ label, icon: Icon, value }) => (
             <Button
               key={value}
@@ -62,7 +62,7 @@ export default function Filters() {
               {label}
             </Button>
           ))}
-        </Button.Group>
+        </ButtonGroup>
       </div>
       <div>
         <span className="uppercase text-sm text-gray-500 mr-2">Order by</span>
@@ -81,7 +81,7 @@ export default function Filters() {
       </div>
       <div>
         <span className="uppercase text-sm text-gray-500 mr-2">Page Size</span>
-        <Button.Group>
+        <ButtonGroup>
           {pageSizeButtons.map((value, i) => (
             <Button
               key={i}
@@ -92,7 +92,7 @@ export default function Filters() {
               {value}
             </Button>
           ))}
-        </Button.Group>
+        </ButtonGroup>
       </div>
     </div>
   );

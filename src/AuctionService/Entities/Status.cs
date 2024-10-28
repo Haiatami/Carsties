@@ -6,4 +6,6 @@ namespace AuctionService.Entities
         Finished,
         ReserveNotMet
     }
+
 }
+

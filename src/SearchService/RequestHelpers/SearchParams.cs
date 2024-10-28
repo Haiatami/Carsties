@@ -10,4 +10,5 @@ namespace SearchService.RequestHelpers
         public string? OrderBy { get; set; }
         public string? FilterBy { get; set; }
     }
+
 }

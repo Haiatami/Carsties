@@ -2,30 +2,25 @@ using AuctionService.Data;
 using Contracts;
 using MassTransit;
 
-namespace AuctionService.Consumers;
-
-public class BidPlacedConsumer : IConsumer<BidPlaced>
+namespace AuctionService.Consumers
 {
-    private readonly AuctionDbContext _dbContext;
-
-    public BidPlacedConsumer(AuctionDbContext dbContext)
+    public class BidPlacedConsumer(AuctionDbContext dbContext) : IConsumer<BidPlaced>
     {
-        _dbContext = dbContext;
-    }
-    public async Task Consume(ConsumeContext<BidPlaced> context)
-    {
-        Console.WriteLine("--> Consuming bid placed");
-
-        var auction = await _dbContext.Auctions.FindAsync(Guid.Parse(context.Message.AuctionId))
-            ?? throw new MessageException(typeof(AuctionFinished), "Cannot retrieve this auction");
-
-        if (auction.CurrentHighBid == null
-            || context.Message.BidStatus.Contains("Accepted")
-            && context.Message.Amount > auction.CurrentHighBid)
+        public async Task Consume(ConsumeContext<BidPlaced> context)
         {
-            auction.CurrentHighBid = context.Message.Amount;
-        }
+            Console.WriteLine("--> Consuming bid placed");
 
-        await _dbContext.SaveChangesAsync();
+            var auction = await dbContext.Auctions.FindAsync(Guid.Parse(context.Message.AuctionId))
+                ?? throw new MessageException(typeof(AuctionFinished), "Cannot retrieve this auction");
+
+            if (auction.CurrentHighBid == null
+                || context.Message.BidStatus.Contains("Accepted")
+                && context.Message.Amount > auction.CurrentHighBid)
+            {
+                auction.CurrentHighBid = context.Message.Amount;
+            }
+
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

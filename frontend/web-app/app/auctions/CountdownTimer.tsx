@@ -57,7 +57,11 @@ export default function CountdownTimer({ auctionEnd }: Props) {
 
   return (
     <div>
-      <Countdown date={auctionEnd} renderer={renderer} onComplete={auctionFinished}/>
+      <Countdown
+        date={auctionEnd}
+        renderer={renderer}
+        onComplete={auctionFinished}
+      />
     </div>
   );
 }

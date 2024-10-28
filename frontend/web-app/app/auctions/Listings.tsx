@@ -1,9 +1,8 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import AuctionCard from "./AuctionCard";
 import AppPagination from "../conponents/AppPagination";
-import { useEffect, useState } from "react";
-import { Auction, PagedResult } from "@/types";
 import { getData } from "../actions/auctionActions";
 import Filters from "./Filters";
 import { useParamsStore } from "@/hooks/useParamsStore";

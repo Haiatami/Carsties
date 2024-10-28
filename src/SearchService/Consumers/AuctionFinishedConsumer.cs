@@ -9,12 +9,15 @@ namespace SearchService.Consumers
     {
         public async Task Consume(ConsumeContext<AuctionFinished> context)
         {
-            var auction = await DB.Find<Item>().OneAsync(context.Message.AuctionId);
+            Console.WriteLine("--> Consuming bid placed");
+
+            var auction = await DB.Find<Item>().OneAsync(context.Message.AuctionId)
+                ?? throw new MessageException(typeof(AuctionFinished), "Cannot retrieve this auction");
 
             if (context.Message.ItemSold)
             {
-                auction.Winner = context.Message.Winner;
-                auction.SoldAmount = (int)context.Message.Amount;
+                auction.Winner = context.Message?.Winner;
+                auction.SoldAmount = context.Message?.Amount;
             }
 
             auction.Status = "Finished";

@@ -8,8 +8,6 @@ using SearchService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -24,12 +22,12 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host =>
+        cfg.Host(builder.Configuration["RabbitMq:Host"], "/", h =>
         {
-            host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
-            host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
+            h.Username(builder.Configuration.GetValue("RabbitMQ:Username", "guest")!);
+            h.Password(builder.Configuration.GetValue("RabbitMQ:Password", "guest")!);
         });
-        
+
         cfg.ReceiveEndpoint("search-auction-created", e =>
         {
             e.UseMessageRetry(r => r.Interval(5, 5));
@@ -40,7 +38,6 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 var app = builder.Build();
 
@@ -52,14 +49,9 @@ app.MapControllers();
 
 app.Lifetime.ApplicationStarted.Register(async () =>
 {
-    try
-    {
-        await DbInitializer.InitDb(app);
-    }
-    catch (Exception e)
-    {
-        Console.WriteLine(e);
-    }
+    await Policy.Handle<TimeoutException>()
+        .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(10))
+        .ExecuteAndCaptureAsync(async () => await DbInitializer.InitDb(app));
 });
 
 app.Run();

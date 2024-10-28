@@ -21,27 +21,26 @@ namespace IdentityService
                 .AddDefaultTokenProviders();
 
             builder.Services
-               .AddIdentityServer(options =>
-               {
-                   options.Events.RaiseErrorEvents = true;
-                   options.Events.RaiseInformationEvents = true;
-                   options.Events.RaiseFailureEvents = true;
-                   options.Events.RaiseSuccessEvents = true;
-
-                   if (builder.Environment.IsEnvironment("Docker"))
-                   {
-                    options.IssuerUri = "http://localhost:5000";
-                   }
-                   // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
-                   // options.EmitStaticAudienceClaim = true;
-               })
-               .AddInMemoryIdentityResources(Config.IdentityResources)
-               .AddInMemoryApiScopes(Config.ApiScopes)
-               .AddInMemoryClients(Config.Clients)
-               .AddAspNetIdentity<ApplicationUser>()
-               .AddProfileService<CustomProfileService>();
+                .AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+                    options.IssuerUri = builder.Configuration["IssuerUri"];
+                })
+                .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryClients(Config.Clients(builder.Configuration))
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddProfileService<CustomProfileService>();
 
             builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
+
+            builder.Services.ConfigureExternalCookie(options =>
             {
                 options.Cookie.SameSite = SameSiteMode.Lax;
             });
@@ -61,8 +60,11 @@ namespace IdentityService
             }
 
             app.UseStaticFiles();
+
             app.UseRouting();
+
             app.UseIdentityServer();
+
             app.UseAuthorization();
 
             app.MapRazorPages()

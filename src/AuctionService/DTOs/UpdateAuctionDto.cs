@@ -8,4 +8,6 @@ namespace AuctionService.DTOs
         public string? Color { get; set; }
         public int? Mileage { get; set; }
     }
+
 }
+

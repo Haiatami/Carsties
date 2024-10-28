@@ -29,3 +29,5 @@ namespace AuctionService.DTOs
         public DateTime AuctionEnd { get; set; }
     }
 }
+
+

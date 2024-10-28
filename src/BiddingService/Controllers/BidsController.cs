@@ -1,5 +1,3 @@
-
-
 using AutoMapper;
 using BiddingService.DTOs;
 using BiddingService.Models;
@@ -14,34 +12,23 @@ namespace BiddingService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BidsController : ControllerBase
+    public class BidsController(IMapper mapper, IPublishEndpoint publishEndpoint,
+    GrpcAuctionClient grpcClient) : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly IPublishEndpoint _publishEndpoint;
-        private readonly GrpcAuctionClient _grpcClient;
-
-        public BidsController(IMapper mapper, IPublishEndpoint publishEndpoint, GrpcAuctionClient grpcClient)
-        {
-            _mapper = mapper;
-            _publishEndpoint = publishEndpoint;
-            _grpcClient = grpcClient;
-        }
-
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<BidDto>> PlaceBid(string auctionId, int amount)
+        public async Task<ActionResult<Bid>> PlaceBid(string auctionId, int amount)
         {
             var auction = await DB.Find<Auction>().OneAsync(auctionId);
 
             if (auction == null)
             {
-                // TODO: check with auction service if that has auction
-                auction = _grpcClient.GetAuction(auctionId);
+                auction = grpcClient.GetAuction(auctionId);
 
                 if (auction == null) return BadRequest("Cannot accept bids on this auction at this time");
             }
 
-            if (auction.Seller == User.Identity.Name)
+            if (auction.Seller == User.Identity?.Name)
             {
                 return BadRequest("You cannot bid on your own item");
             }
@@ -78,11 +65,12 @@ namespace BiddingService.Controllers
                     bid.BidStatus = BidStatus.TooLow;
                 }
             }
+
             await DB.SaveAsync(bid);
 
-            await _publishEndpoint.Publish(_mapper.Map<BidPlaced>(bid));
+            await publishEndpoint.Publish(mapper.Map<BidPlaced>(bid));
 
-            return Ok(_mapper.Map<BidDto>(bid));
+            return Ok(mapper.Map<BidDto>(bid));
         }
 
         [HttpGet("{auctionId}")]
@@ -93,7 +81,7 @@ namespace BiddingService.Controllers
                 .Sort(b => b.Descending(a => a.BidTime))
                 .ExecuteAsync();
 
-            return bids.Select(_mapper.Map<BidDto>).ToList();
+            return bids.Select(mapper.Map<BidDto>).ToList(); ;
         }
     }
 }

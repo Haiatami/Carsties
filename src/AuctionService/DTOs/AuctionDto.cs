@@ -20,3 +20,4 @@ namespace AuctionService.DTOs
         public required string ImageUrl { get; set; }
     }
 }
+

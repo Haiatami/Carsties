@@ -8,4 +8,5 @@ namespace Contracts
         public required string Seller { get; set; }
         public int? Amount { get; set; }
     }
+
 }

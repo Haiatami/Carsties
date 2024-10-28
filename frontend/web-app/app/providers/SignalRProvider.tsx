@@ -8,8 +8,8 @@ import { User } from "next-auth";
 import { useParams } from "next/navigation";
 import React, { ReactNode, useCallback, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
-import { getDetailedViewData } from "../actions/auctionActions";
 import AuctionCreatedToast from "../conponents/AuctionCreatedToast";
+import { getDetailedViewData } from "../actions/auctionActions";
 import AuctionFinishedToast from "../conponents/AuctionFinishedToast";
 
 type Props = {

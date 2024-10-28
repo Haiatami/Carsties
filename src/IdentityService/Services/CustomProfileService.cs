@@ -7,27 +7,22 @@ using Microsoft.AspNetCore.Identity;
 
 namespace IdentityService.Services
 {
-    public class CustomProfileService : IProfileService
+    public class CustomProfileService(UserManager<ApplicationUser> userManager) : IProfileService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public CustomProfileService(UserManager<ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-        }
-
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var user = await _userManager.GetUserAsync(context.Subject);
-            var existingClaims = await _userManager.GetClaimsAsync(user);
+            var user = await userManager.GetUserAsync(context.Subject)
+                ?? throw new ArgumentException("User not available");
+
+            var existingClaims = await userManager.GetClaimsAsync(user);
 
             var claims = new List<Claim>
         {
-            new Claim("username", user.UserName)
+            new Claim("username", user.UserName!)
         };
 
             context.IssuedClaims.AddRange(claims);
-            context.IssuedClaims.Add(existingClaims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name));
+            context.IssuedClaims.Add(existingClaims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name)!);
         }
 
         public Task IsActiveAsync(IsActiveContext context)
@@ -35,4 +30,5 @@ namespace IdentityService.Services
             return Task.CompletedTask;
         }
     }
+
 }

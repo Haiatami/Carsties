@@ -17,4 +17,6 @@ namespace AuctionService.Entities
         public Auction Auction { get; set; } = null!;
         public Guid AuctionId { get; set; }
     }
+
 }
+

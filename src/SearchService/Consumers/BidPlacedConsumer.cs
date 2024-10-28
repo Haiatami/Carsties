@@ -11,9 +11,11 @@ namespace SearchService.Consumers
         {
             Console.WriteLine("--> Consuming bid placed");
 
-            var auction = await DB.Find<Item>().OneAsync(context.Message.AuctionId);
+            var auction = await DB.Find<Item>().OneAsync(context.Message.AuctionId)
+                ?? throw new MessageException(typeof(AuctionFinished), "Cannot retrieve this auction");
 
-            if (context.Message.BidStatus.Contains("Accepted") 
+            if (auction.CurrentHighBid == null
+                || context.Message.BidStatus.Contains("Accepted")
                 && context.Message.Amount > auction.CurrentHighBid)
             {
                 auction.CurrentHighBid = context.Message.Amount;
@@ -21,4 +23,5 @@ namespace SearchService.Consumers
             }
         }
     }
+
 }
