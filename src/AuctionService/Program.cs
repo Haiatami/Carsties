@@ -74,3 +74,5 @@ var retryPolicy = Policy
 retryPolicy.ExecuteAndCapture(() => DbInitializer.InitDb(app));
 
 app.Run();
+
+public partial class Program { }
