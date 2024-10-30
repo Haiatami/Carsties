@@ -2,7 +2,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Mongo2Go;
 using MongoDB.Driver;
 using MongoDB.Entities;
