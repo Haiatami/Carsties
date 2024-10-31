@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "./nav/NavBar";
 import ToasterProvider from "./providers/ToasterProvider";
 import SignalRProvider from "./providers/SignalRProvider";
 import { getCurrentUser } from "./actions/authActions";
+import Navbar from "./nav/NavBar";
 
 export const metadata: Metadata = {
   title: "Carsties",
