@@ -16,6 +16,18 @@ jobs:
         service:
           - name: "tahoanghai744/auction-svc"
             path: "src/AuctionService"
+          - name: "tahoanghai744/search-svc"
+            path: "src/SearchService"
+          - name: "tahoanghai744/bid-svc"
+            path: "src/BiddingService"
+          - name: "tahoanghai744/identity-svc"
+            path: "src/IdentityService"
+          - name: "tahoanghai744/gateway-svc"
+            path: "src/GatewayService"
+          - name: "tahoanghai744/notify-svc"
+            path: "src/NotificationService"
+          - name: "tahoanghai744/web-app"
+            path: "frontend/web-app"
 
     steps:
       - name: Checkout code
