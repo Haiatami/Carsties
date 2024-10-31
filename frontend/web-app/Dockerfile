@@ -1,21 +1,21 @@
-FROM node:20-alpine AS deps
+FROM node:18-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY frontend/web-app/package*.json ./
 RUN  npm install --omit-dev
 
-FROM node:20-alpine AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/web-app ./
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN npm run build
+RUN npm run dev
 
 # production image, copy all files and run next
-FROM node:20-alpine AS runner
+FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
